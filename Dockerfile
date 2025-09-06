@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor wget unzip curl ca-certificates gnupg \
     xfce4 xfce4-goodies xfce4-session xorg dbus-x11 x11-xserver-utils xrdp \
-    postgresql-14 postgresql-contrib nginx \
+    postgresql postgresql-contrib nginx \
     build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev \
     libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev \
     freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev \
