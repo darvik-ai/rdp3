@@ -35,16 +35,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget -qO guacamole-auth-jdbc-1.5.5.tar.gz https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz && \
     tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz && \
     mv guacamole-auth-jdbc-1.5.5/postgresql/guacamole-auth-jdbc-postgresql-1.5.5.jar /etc/guacamole/extensions/ && \
-    # Install Ngrok
-    curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip && \
-    unzip ngrok.zip -d /usr/local/bin && \
-    rm ngrok.zip && \
+    # Install Ngrok 3.7.0
+    wget -qO ngrok-v3.7.0-linux-amd64.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip && \
+    unzip ngrok-v3.7.0-linux-amd64.zip -d /usr/local/bin && \
+    rm ngrok-v3.7.0-linux-amd64.zip && \
     # Clean up
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* *.tar.gz guacamole-auth-jdbc-1.5.5
 
 # Setup users, permissions, and directories
-RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl && \
+RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.ngrok && \
     useradd -m -s /bin/bash user && \
     adduser xrdp ssl-cert && \
     chown -R postgres:postgres /var/lib/postgresql && \
@@ -59,6 +59,7 @@ COPY supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 COPY guacamole.properties /etc/guacamole/guacamole.properties
 COPY nginx.conf /etc/nginx/sites-available/default
 COPY init-db.sh /init-db.sh
+COPY ngrok.yml /root/.ngrok/ngrok.yml
 
 # Set permissions for scripts
 RUN chmod +x /entrypoint.sh /init-db.sh
