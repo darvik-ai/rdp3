@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get update && apt-get install -y --no-install-recommends \
     tomcat9 tomcat9-admin && \
     # Create Guacamole directories early
-    mkdir -p /etc/guacamole/extensions /etc/guacamole/lib /var/lib/guacamole && \
+    mkdir -p /etc/guacamole/extensions /etc/guacamole/lib /var/lib/guacamole /guacamole-schema && \
     # Build guacd from source
     wget -qO guacamole-server-1.5.5.tar.gz https://downloads.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz && \
     echo "Verifying guacamole-server download" && \
@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget -qO guacamole-auth-jdbc-1.5.5.tar.gz https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz && \
     tar -xzf guacamole-auth-jdbc-1.5.5.tar.gz && \
     mv guacamole-auth-jdbc-1.5.5/postgresql/guacamole-auth-jdbc-postgresql-1.5.5.jar /etc/guacamole/extensions/ && \
+    mv guacamole-auth-jdbc-1.5.5/postgresql/schema /guacamole-schema/postgresql && \
     # Install Ngrok 3.7.0
     wget -qO ngrok-v3.7.0-linux-amd64.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip && \
     unzip ngrok-v3.7.0-linux-amd64.zip -d /usr/local/bin && \
@@ -51,7 +52,9 @@ RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.ngrok && \
     ln -s /usr/share/java/postgresql.jar /etc/guacamole/lib/postgresql.jar && \
     # Configure xrdp
     echo "startxfce4" > /home/user/.xsession && \
-    chown user:user /home/user/.xsession
+    chown user:user /home/user/.xsession && \
+    # Configure PostgreSQL for md5 auth
+    echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf
 
 # Copy configuration files
 COPY entrypoint.sh /entrypoint.sh
