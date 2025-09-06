@@ -1,2 +1,2 @@
 #!/bin/bash
-cat /guacamole-auth-jdbc-1.5.5/postgresql/schema/*.sql | psql -U guac_user -d guacamole_db
+cat /guacamole-schema/postgresql/*.sql | psql -h localhost -U guac_user -d guacamole_db
