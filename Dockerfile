@@ -3,11 +3,11 @@ FROM debian:bookworm
 # Set noninteractive frontend to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies in one layer to minimize image size
+# Install dependencies in one layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor wget unzip curl ca-certificates gnupg \
-    xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils xrdp \
-    postgresql postgresql-contrib nginx \
+    xfce4 xfce4-goodies xfce4-session xorg dbus-x11 x11-xserver-utils xrdp \
+    postgresql-14 postgresql-contrib nginx \
     build-essential libcairo2-dev libjpeg62-turbo-dev libpng-dev \
     libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev \
     freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev \
@@ -43,12 +43,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* *.tar.gz guacamole-auth-jdbc-1.5.5
 
-# Setup users, permissions, and remaining directories
+# Setup users, permissions, and directories
 RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl && \
     useradd -m -s /bin/bash user && \
     adduser xrdp ssl-cert && \
     chown -R postgres:postgres /var/lib/postgresql && \
-    ln -s /usr/share/java/postgresql.jar /etc/guacamole/lib/postgresql.jar
+    ln -s /usr/share/java/postgresql.jar /etc/guacamole/lib/postgresql.jar && \
+    # Configure xrdp
+    echo "startxfce4" > /home/user/.xsession && \
+    chown user:user /home/user/.xsession
 
 # Copy configuration files
 COPY entrypoint.sh /entrypoint.sh
@@ -62,10 +65,6 @@ RUN chmod +x /entrypoint.sh /init-db.sh
 
 # Expose no ports (Ngrok handles external access)
 VOLUME ["/var/lib/postgresql/data", "/home/user"]
-
-# Environment variables for credentials (set at runtime)
-ENV USER_PASSWORD password123
-ENV POSTGRES_PASSWORD supersecretpassword
 
 # Entry point
 ENTRYPOINT ["/entrypoint.sh"]
