@@ -28,8 +28,11 @@ su - postgres -c "psql guacamole_db -c \"INSERT INTO guacamole_connection_parame
 su - postgres -c "psql guacamole_db -c \"INSERT INTO guacamole_connection_parameter (connection_id, parameter_name, parameter_value) VALUES (1, 'security', 'any') ON CONFLICT DO NOTHING;\""
 su - postgres -c "psql guacamole_db -c \"INSERT INTO guacamole_connection_parameter (connection_id, parameter_name, parameter_value) VALUES (1, 'ignore-cert', 'true') ON CONFLICT DO NOTHING;\""
 
+# Configure Ngrok authtoken
+ngrok config add-authtoken ${NGROK_AUTHTOKEN}
+
 # Start Supervisor
 supervisord -c /etc/supervisor/conf.d/supervisord.conf &
 
-# Run Ngrok (HTTP; use 443 for HTTPS)
-ngrok http 80 --authtoken ${NGROK_AUTHTOKEN} --log=stdout
+# Run Ngrok with config file (HTTP; use 443 for HTTPS)
+ngrok start --all --log=stdout
