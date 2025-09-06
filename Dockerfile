@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/* *.tar.gz guacamole-auth-jdbc-1.5.5
 
 # Setup users, permissions, and directories
-RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.ngrok && \
+RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.config/ngrok && \
     useradd -m -s /bin/bash user && \
     adduser xrdp ssl-cert && \
     chown -R postgres:postgres /var/lib/postgresql && \
@@ -62,7 +62,7 @@ COPY supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 COPY guacamole.properties /etc/guacamole/guacamole.properties
 COPY nginx.conf /etc/nginx/sites-available/default
 COPY init-db.sh /init-db.sh
-COPY ngrok.yml /root/.ngrok/ngrok.yml
+COPY ngrok.yml /root/.config/ngrok/ngrok.yml
 
 # Set permissions for scripts
 RUN chmod +x /entrypoint.sh /init-db.sh
