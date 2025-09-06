@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Initialize PostgreSQL cluster if not exists
-if [ ! -d /var/lib/postgresql/14/main ]; then
-    su - postgres -c "pg_createcluster 14 main"
+if [ ! -d /var/lib/postgresql/15/main ]; then
+    su - postgres -c "pg_createcluster 15 main"
 fi
 
 # Start PostgreSQL
