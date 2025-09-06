@@ -1,7 +1,5 @@
 version: 3
-agent:
-  authtoken: ""
-endpoints:
-  - name: guacamole
-    url: "http://*.ngrok.app"
-    upstream: "http://localhost:80"
+tunnels:
+  guacamole:
+    proto: http
+    addr: localhost:80
