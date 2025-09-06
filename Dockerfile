@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev \
     freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev \
     libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev \
-    libvorbis-dev libwebp-dev && \
+    libvorbis-dev libwebp-dev openjdk-17-jre && \
     # Add bullseye repo for tomcat9
     echo "deb http://deb.debian.org/debian bullseye main" > /etc/apt/sources.list.d/bullseye.list && \
     echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list.d/bullseye.list && \
@@ -54,7 +54,9 @@ RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.config/ngrok && \
     echo "startxfce4" > /home/user/.xsession && \
     chown user:user /home/user/.xsession && \
     # Configure PostgreSQL for md5 auth
-    echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf
+    echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf && \
+    # Ensure Tomcat permissions
+    chown -R tomcat9:tomcat9 /var/lib/tomcat9 /etc/tomcat9
 
 # Copy configuration files
 COPY entrypoint.sh /entrypoint.sh
