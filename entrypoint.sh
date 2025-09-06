@@ -40,6 +40,7 @@ echo "Creating PostgreSQL user and database..."
 su - postgres -c "psql -c \"CREATE USER guac_user WITH PASSWORD '$POSTGRES_PASSWORD';\" || true"
 su - postgres -c "psql -c \"CREATE DATABASE guacamole_db;\" || true"
 su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE guacamole_db TO guac_user;\" || true"
+su - postgres -c "psql -c \"GRANT CREATE, USAGE ON SCHEMA public TO guac_user;\" || true"
 
 # Check for schema files
 if ls /guacamole-schema/postgresql/*.sql >/dev/null 2>&1; then
