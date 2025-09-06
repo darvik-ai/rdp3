@@ -10,9 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     freerdp2-dev libpango1.0-dev libssh2-1-dev libtelnet-dev \
     libvncserver-dev libwebsockets-dev libpulse-dev libssl-dev \
     libvorbis-dev libwebp-dev && \
-    # Add Debian buster repo for tomcat9
-    echo "deb http://deb.debian.org/debian buster main" > /etc/apt/sources.list.d/buster.list && \
-    echo "deb http://deb.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list.d/buster.list && \
+    # Add Debian bullseye repo for tomcat9
+    echo "deb http://deb.debian.org/debian bullseye main" > /etc/apt/sources.list.d/bullseye.list && \
+    echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list.d/bullseye.list && \
     apt-get update && apt-get install -y --no-install-recommends \
     tomcat9 tomcat9-admin && \
     # Build guacd from source
