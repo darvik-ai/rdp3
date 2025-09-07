@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     echo "deb http://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list.d/bullseye.list && \
     apt-get update && apt-get install -y --no-install-recommends \
     tomcat9 tomcat9-admin && \
+    # Ensure Tomcat permissions
+    chown -R tomcat9:tomcat9 /var/lib/tomcat9 /etc/tomcat9 && \
     # Create Guacamole directories early
     mkdir -p /etc/guacamole/extensions /etc/guacamole/lib /var/lib/guacamole /guacamole-schema && \
     # Build guacd from source
@@ -54,9 +56,7 @@ RUN mkdir -p /etc/supervisor/conf.d /etc/nginx/ssl /root/.config/ngrok && \
     echo "startxfce4" > /home/user/.xsession && \
     chown user:user /home/user/.xsession && \
     # Configure PostgreSQL for md5 auth
-    echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf && \
-    # Ensure Tomcat permissions
-    chown -R tomcat9:tomcat9 /var/lib/tomcat9 /etc/tomcat9
+    echo "host all all 127.0.0.1/32 md5" >> /etc/postgresql/15/main/pg_hba.conf
 
 # Copy configuration files
 COPY entrypoint.sh /entrypoint.sh
